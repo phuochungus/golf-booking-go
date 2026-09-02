@@ -6,6 +6,7 @@ import (
 	"golf-booking-go/global"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
 )
 

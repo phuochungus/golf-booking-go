@@ -1,3 +1,4 @@
+-- +goose Up
 CREATE TABLE IF NOT EXISTS `organizations` (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL UNIQUE COMMENT 'Tên đơn vị',
@@ -110,3 +111,15 @@ CREATE TABLE IF NOT EXISTS `authz_admin_permissions` (
     FOREIGN KEY (admin_id) REFERENCES admins(id),
     FOREIGN KEY (permission_id) REFERENCES authz_permissions(id)
 );
+
+-- +goose Down
+DROP TABLE IF EXISTS `authz_admin_permissions`;
+DROP TABLE IF EXISTS `authz_admin_roles`;
+DROP TABLE IF EXISTS `authz_role_permissions`;
+DROP TABLE IF EXISTS `authz_roles`;
+DROP TABLE IF EXISTS `authz_permissions`;
+DROP TABLE IF EXISTS `facilities`;
+DROP TABLE IF EXISTS `authz_actions`;
+DROP TABLE IF EXISTS `authz_objects`;
+DROP TABLE IF EXISTS `admins`;
+DROP TABLE IF EXISTS `organizations`;
