@@ -1,10 +1,11 @@
 package setting
 
 type Config struct {
-	Mysql  MySQLSetting  `mapstructure:"mysql"`
-	Logger LoggerSetting `mapstructure:"logger"`
-	Redis  RedisSetting  `mapstructure:"redis"`
-	Server ServerSetting `mapstructure:"server"`
+	SecretApiKey string        `mapstructure:"secretApiKey"`
+	Mysql        MySQLSetting  `mapstructure:"mysql"`
+	Logger       LoggerSetting `mapstructure:"logger"`
+	Redis        RedisSetting  `mapstructure:"redis"`
+	Server       ServerSetting `mapstructure:"server"`
 }
 
 type MySQLSetting struct {
