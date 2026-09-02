@@ -30,7 +30,7 @@ func InitMysql() {
 
 func SetPool() {
 	m := global.Config.Mysql
-	db := global.DB
+	db, _ := global.DB.DB()
 	if err := db.Ping(); err != nil {
 		fmt.Printf("mysql error: %s::", err)
 	}

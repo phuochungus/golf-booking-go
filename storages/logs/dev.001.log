@@ -4,3 +4,7 @@
 {"level":"ERROR","time":"2026-09-02T20:58:20.871+0700","caller":"initialize/mysql.go:14","msg":"InitMysql initialization error","error":"sql: unknown driver \"mysql\" (forgotten import?)","stacktrace":"golf-booking-go/internal/initialize.checkErrorPanic\n\t/Users/macbook/Desktop/golf-booking-go/internal/initialize/mysql.go:14\ngolf-booking-go/internal/initialize.InitMysql\n\t/Users/macbook/Desktop/golf-booking-go/internal/initialize/mysql.go:23\ngolf-booking-go/internal/initialize.Run\n\t/Users/macbook/Desktop/golf-booking-go/internal/initialize/run.go:15\nmain.main\n\t/Users/macbook/Desktop/golf-booking-go/cmd/server/server.go:6\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:302"}
 {"level":"INFO","time":"2026-09-02T20:58:56.169+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
 {"level":"INFO","time":"2026-09-02T20:58:56.184+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-02T22:37:05.560+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-02T22:37:05.596+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-02T22:37:18.615+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-02T22:37:18.628+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
