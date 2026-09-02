@@ -8,3 +8,5 @@
 {"level":"INFO","time":"2026-09-02T22:37:05.596+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
 {"level":"INFO","time":"2026-09-02T22:37:18.615+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
 {"level":"INFO","time":"2026-09-02T22:37:18.628+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-02T22:59:43.824+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-02T22:59:43.864+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
