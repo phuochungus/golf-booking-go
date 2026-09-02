@@ -2,8 +2,8 @@ services:
   mysql:
     image: mysql:8.4
     environment:
-      MYSQL_ROOT_PASSWORD: root1234
-      MYSQL_DATABASE: shopdevgo
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: golf_booking
     ports:
       - "127.0.0.1:3306:3306"
     volumes:
