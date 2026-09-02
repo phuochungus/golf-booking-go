@@ -1,13 +1,14 @@
 package initialize
 
 import (
-	"database/sql"
 	"fmt"
 	"golf-booking-go/global"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 	"go.uber.org/zap"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func checkErrorPanic(err error, errString string) {
@@ -20,7 +21,7 @@ func InitMysql() {
 	config := global.Config.Mysql
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%v)/%s?charset=utf8mb4&parseTime=True", config.Username, config.Password, config.Host, config.Port, config.Dbname)
 
-	db, err := sql.Open("mysql", dsn)
+	db, err := gorm.Open(mysql.Open(dsn))
 	checkErrorPanic(err, "InitMysql initialization error")
 
 	global.DB = db
