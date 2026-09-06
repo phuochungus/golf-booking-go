@@ -6,9 +6,14 @@ GOOSE_TABLE=goose_migrations
 
 run:
 	go run ./cmd/${APP_NAME}/
-up:
+migrate_up:
 	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_MIGRATION_DIR=${GOOSE_MIGRATION_DIR} GOOSE_TABLE=${GOOSE_TABLE} goose -dir=${GOOSE_MIGRATION_DIR} up
-down:
+migrate_down:
 	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_MIGRATION_DIR=${GOOSE_MIGRATION_DIR} GOOSE_TABLE=${GOOSE_TABLE} goose -dir=${GOOSE_MIGRATION_DIR} down
-
-.PHONY: run up down
+up:
+	docker-compose up -d
+down:
+	docker-compose down
+build:
+	docker-compose build
+.PHONY: run migrate_up migrate_down up down build
