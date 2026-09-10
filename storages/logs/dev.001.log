@@ -16,3 +16,13 @@
 {"level":"INFO","time":"2026-09-06T20:39:05.186+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
 {"level":"INFO","time":"2026-09-06T20:39:12.671+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
 {"level":"INFO","time":"2026-09-06T20:39:12.710+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-06T21:10:51.799+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-06T21:10:51.820+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-06T21:11:08.599+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-06T21:11:08.606+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-06T21:11:12.347+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-06T21:11:12.356+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-06T21:25:31.982+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-06T21:25:32.005+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
+{"level":"INFO","time":"2026-09-06T21:25:35.194+0700","caller":"initialize/run.go:14","msg":"Config log ok!!","ok":"success"}
+{"level":"INFO","time":"2026-09-06T21:25:35.203+0700","caller":"initialize/redis.go:31","msg":"Redis connection successful"}
