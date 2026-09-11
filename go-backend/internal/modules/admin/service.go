@@ -9,6 +9,4 @@ func NewAdminService() *AdminService {
 	return &AdminService{}
 }
 
-func (s *AdminService) RegisterAdmin(admin *entities.Admin) error {
-
-}
+func (s *AdminService) RegisterAdmin(admin *entities.Admin)
