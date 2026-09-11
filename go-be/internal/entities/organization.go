@@ -2,9 +2,7 @@ package entities
 
 type Organization struct {
 	BaseModel
-	Name  string `gorm:"column:name"`
-	Phone string `gorm:"column:phone"`
-	Email string `gorm:"column:email"`
+	Name string `gorm:"column:name"`
 }
 
 func (Organization) TableName() string {

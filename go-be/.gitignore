@@ -1,3 +1,4 @@
 tmp/
 **/*.log
 storages/logs/dev.001.log
+**/.DS_Store
