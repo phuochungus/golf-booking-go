@@ -79,7 +79,7 @@ func (s *AdminService) RegisterAdmin(dto *dto.RegisterAdminDTO) (*int32, error) 
 	return returnedID, nil
 }
 
-func (s *AdminService) LoginAdmin(dto *dto.LoginAdminDTO) (string, error) {
+func (s *AdminService) LoginAdmin(dto *dto.LoginAdminDTO) (string, string, error) {
 	var (
 		admin    entities.Admin
 		adminErr error
@@ -92,20 +92,20 @@ func (s *AdminService) LoginAdmin(dto *dto.LoginAdminDTO) (string, error) {
 
 	switch {
 	case errors.Is(adminErr, gorm.ErrRecordNotFound):
-		return "", errors.New("admin not found")
+		return "", "", errors.New("admin not found")
 
 	case adminErr != nil:
-		return "", fmt.Errorf("check admin existence: %w", adminErr)
+		return "", "", fmt.Errorf("check admin existence: %w", adminErr)
 	}
 
 	if err := utils.Compare(admin.AdminCredential.HashedPassword, dto.Password); err != nil {
-		return "", errors.New("invalid password")
+		return "", "", errors.New("invalid password")
 	}
 
-	token, err := utils.GenerateJWT(admin.ID)
+	accessToken, refreshToken, err := utils.GenerateTokens(admin.ID)
 	if err != nil {
-		return "", fmt.Errorf("generate JWT: %w", err)
+		return "", "", fmt.Errorf("generate JWT: %w", err)
 	}
 
-	return token, nil
+	return accessToken, refreshToken, nil
 }

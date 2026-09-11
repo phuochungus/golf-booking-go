@@ -1,12 +1,11 @@
 package setting
 
 type Config struct {
-	SecretApiKey string        `mapstructure:"secretApiKey"`
-	SecretJwtKey string        `mapstructure:"secretJwtKey"`
-	Mysql        MySQLSetting  `mapstructure:"mysql"`
-	Logger       LoggerSetting `mapstructure:"logger"`
-	Redis        RedisSetting  `mapstructure:"redis"`
-	Server       ServerSetting `mapstructure:"server"`
+	Secret SecretSetting `mapstructure:"secret"`
+	Mysql  MySQLSetting  `mapstructure:"mysql"`
+	Logger LoggerSetting `mapstructure:"logger"`
+	Redis  RedisSetting  `mapstructure:"redis"`
+	Server ServerSetting `mapstructure:"server"`
 }
 
 type MySQLSetting struct {
@@ -40,4 +39,9 @@ type RedisSetting struct {
 type ServerSetting struct {
 	Port int    `mapstructure:"port"`
 	Mode string `mapstructure:"mode"`
+}
+
+type SecretSetting struct {
+	ApiKey    string `mapstructure:"apiKey"`
+	JwtSecret string `mapstructure:"jwtSecret"`
 }

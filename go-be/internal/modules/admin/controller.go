@@ -36,10 +36,10 @@ func (a *AdminController) LoginAdmin(c *gin.Context) {
 		response.ErrorResponse(c, http.StatusBadRequest, err.Error(), http.StatusBadRequest)
 		return
 	}
-	token, err := a.s.LoginAdmin(dto)
+	accessToken, refreshToken, err := a.s.LoginAdmin(dto)
 	if err != nil {
 		response.ErrorResponse(c, http.StatusInternalServerError, err.Error(), response.ErrorCodeBadRequest)
 		return
 	}
-	response.SuccessResponse(c, gin.H{"token": token})
+	response.SuccessResponse(c, gin.H{"accessToken": accessToken, "refreshToken": refreshToken})
 }

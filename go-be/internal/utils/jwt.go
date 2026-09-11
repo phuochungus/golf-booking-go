@@ -2,19 +2,38 @@ package utils
 
 import (
 	"golf-booking-go/global"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateJWT(adminID int32) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"admin_id": adminID,
-	})
+func GenerateTokens(adminID int32) (string, string, error) {
+	// generate access token and refresh token
 
-	// Sign the token with a secret key (replace "your_secret_key" with your actual secret)
-	tokenString, err := token.SignedString([]byte(global.Config.SecretJwtKey))
-	if err != nil {
-		return "", err
+	// 5min
+	accessTokenClaims := jwt.MapClaims{
+		"admin_id": adminID,
+		"exp":      jwt.NewNumericDate(time.Now().Add(5 * time.Minute)),
 	}
-	return tokenString, nil
+
+	// 7 days
+	refreshTokenClaims := jwt.MapClaims{
+		"admin_id": adminID,
+		"exp":      jwt.NewNumericDate(time.Now().Add(7 * 24 * time.Hour)),
+	}
+
+	accessToken := jwt.NewWithClaims(jwt.SigningMethodHS256, accessTokenClaims)
+	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, refreshTokenClaims)
+
+	signedAccessToken, err := accessToken.SignedString([]byte(global.Config.Secret.JwtSecret))
+	if err != nil {
+		return "", "", err
+	}
+
+	signedRefreshToken, err := refreshToken.SignedString([]byte(global.Config.Secret.JwtSecret))
+	if err != nil {
+		return "", "", err
+	}
+
+	return signedAccessToken, signedRefreshToken, nil
 }
