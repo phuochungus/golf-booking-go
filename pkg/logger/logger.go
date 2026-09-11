@@ -14,9 +14,9 @@ type LoggerZap struct {
 }
 
 func NewLogger(config setting.LoggerSetting) *LoggerZap {
-	logLevel := config.LogLevel
 	var level zapcore.Level
-	switch logLevel {
+
+	switch config.LogLevel {
 	case "debug":
 		level = zapcore.DebugLevel
 	case "info":
@@ -32,8 +32,8 @@ func NewLogger(config setting.LoggerSetting) *LoggerZap {
 	default:
 		level = zapcore.InfoLevel
 	}
-	encoder := getEncoderLog()
-	hook := lumberjack.Logger{
+
+	hook := &lumberjack.Logger{
 		Filename:   config.Filename,
 		MaxSize:    config.MaxSize,
 		MaxBackups: config.MaxBackups,
@@ -41,20 +41,48 @@ func NewLogger(config setting.LoggerSetting) *LoggerZap {
 		Compress:   config.Compress,
 	}
 
-	core := zapcore.NewCore(
-		encoder,
-		zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(&hook)),
+	consoleCore := zapcore.NewCore(
+		getConsoleEncoder(),
+		zapcore.AddSync(os.Stdout),
 		level,
 	)
 
-	return &LoggerZap{zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))}
+	fileCore := zapcore.NewCore(
+		getJSONEncoder(),
+		zapcore.AddSync(hook),
+		level,
+	)
+
+	core := zapcore.NewTee(consoleCore, fileCore)
+
+	logger := zap.New(
+		core,
+		zap.AddCaller(),
+		zap.AddStacktrace(zapcore.ErrorLevel),
+	)
+
+	return &LoggerZap{
+		Logger: logger,
+	}
 }
 
-func getEncoderLog() zapcore.Encoder {
-	encodeConfig := zap.NewProductionEncoderConfig()
-	encodeConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	encodeConfig.TimeKey = "time"
-	encodeConfig.EncodeLevel = zapcore.CapitalLevelEncoder
-	encodeConfig.EncodeCaller = zapcore.ShortCallerEncoder
-	return zapcore.NewJSONEncoder(encodeConfig)
+func getConsoleEncoder() zapcore.Encoder {
+	config := zap.NewDevelopmentEncoderConfig()
+
+	config.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	config.EncodeCaller = zapcore.ShortCallerEncoder
+
+	return zapcore.NewConsoleEncoder(config)
+}
+
+func getJSONEncoder() zapcore.Encoder {
+	config := zap.NewProductionEncoderConfig()
+
+	config.TimeKey = "time"
+	config.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncodeLevel = zapcore.CapitalLevelEncoder
+	config.EncodeCaller = zapcore.ShortCallerEncoder
+
+	return zapcore.NewJSONEncoder(config)
 }
