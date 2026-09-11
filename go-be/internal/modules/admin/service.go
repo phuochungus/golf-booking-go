@@ -25,13 +25,13 @@ func NewAdminService(db *gorm.DB) *AdminService {
 	}
 }
 
-func (s *AdminService) RegisterAdmin(dto *dto.RegisterAdminDTO) (*int32, error) {
+func (s *AdminService) RegisterAdmin(ctx context.Context, dto *dto.RegisterAdminDTO) (*int32, error) {
 	var (
 		admin    entities.Admin
 		adminErr error
 	)
 
-	adminErr = s.db.
+	adminErr = s.db.WithContext(ctx).
 		Select("id").
 		Where("email = ?", dto.Email).
 		First(&admin).
@@ -48,7 +48,7 @@ func (s *AdminService) RegisterAdmin(dto *dto.RegisterAdminDTO) (*int32, error) 
 
 	var returnedID *int32
 
-	err := s.db.Transaction(func(tx *gorm.DB) error {
+	err := s.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 		hashedPassword, err := utils.Hash(dto.Password)
 		if err != nil {
 			return fmt.Errorf("hash password: %w", err)

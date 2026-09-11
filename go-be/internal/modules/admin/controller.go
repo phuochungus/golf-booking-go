@@ -23,7 +23,7 @@ func (a *AdminController) RegisterAdmin(c *gin.Context) {
 		response.ErrorResponse(c, http.StatusBadRequest, err.Error(), http.StatusBadRequest)
 		return
 	}
-	id, err := a.s.RegisterAdmin(dto)
+	id, err := a.s.RegisterAdmin(c.Request.Context(), dto)
 	if err != nil {
 		response.ErrorResponse(c, http.StatusInternalServerError, err.Error(), response.ErrorCodeBadRequest)
 		return
