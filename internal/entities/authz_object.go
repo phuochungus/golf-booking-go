@@ -1,4 +1,4 @@
-package po
+package entities
 
 type AuthzObject struct {
 	BaseModel

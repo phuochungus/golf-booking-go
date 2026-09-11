@@ -1,4 +1,4 @@
-package po
+package entities
 
 type AuthzAction struct {
 	BaseModel

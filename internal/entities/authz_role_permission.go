@@ -1,4 +1,4 @@
-package po
+package entities
 
 type AuthzRolePermission struct {
 	BaseModel
