@@ -14,4 +14,5 @@ func InitAdminRouter(apiGroup *gin.RouterGroup) {
 	adminGroup := apiGroup.Group("/admin")
 
 	adminGroup.POST("/register", controller.RegisterAdmin)
+	adminGroup.POST("/login", controller.LoginAdmin)
 }

@@ -29,3 +29,17 @@ func (a *AdminController) RegisterAdmin(c *gin.Context) {
 	}
 	response.SuccessResponse(c, gin.H{"adminId": id})
 }
+
+func (a *AdminController) LoginAdmin(c *gin.Context) {
+	var dto *dto.LoginAdminDTO
+	if err := c.ShouldBindJSON(&dto); err != nil {
+		response.ErrorResponse(c, http.StatusBadRequest, err.Error(), http.StatusBadRequest)
+		return
+	}
+	token, err := a.s.LoginAdmin(dto)
+	if err != nil {
+		response.ErrorResponse(c, http.StatusInternalServerError, err.Error(), response.ErrorCodeBadRequest)
+		return
+	}
+	response.SuccessResponse(c, gin.H{"token": token})
+}

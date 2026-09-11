@@ -1,4 +1,5 @@
 secretApiKey: "1234"
+secretJwtKey: "1234"
 server:
   port: 8002
   mode: "dev"

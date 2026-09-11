@@ -2,6 +2,7 @@ package setting
 
 type Config struct {
 	SecretApiKey string        `mapstructure:"secretApiKey"`
+	SecretJwtKey string        `mapstructure:"secretJwtKey"`
 	Mysql        MySQLSetting  `mapstructure:"mysql"`
 	Logger       LoggerSetting `mapstructure:"logger"`
 	Redis        RedisSetting  `mapstructure:"redis"`

@@ -6,7 +6,6 @@ import (
 	"golf-booking-go/internal/entities"
 	"golf-booking-go/internal/modules/admin/dto"
 	"golf-booking-go/internal/utils"
-	"sync"
 
 	"gorm.io/gorm"
 )
@@ -24,35 +23,14 @@ func NewAdminService(db *gorm.DB) *AdminService {
 func (s *AdminService) RegisterAdmin(dto *dto.RegisterAdminDTO) (*int32, error) {
 	var (
 		admin    entities.Admin
-		org      entities.Organization
 		adminErr error
-		orgErr   error
 	)
 
-	var wg sync.WaitGroup
-	wg.Add(2)
-
-	go func() {
-		defer wg.Done()
-
-		adminErr = s.db.
-			Select("id").
-			Where("email = ?", dto.Email).
-			First(&admin).
-			Error
-	}()
-
-	go func() {
-		defer wg.Done()
-
-		orgErr = s.db.
-			Select("id").
-			Where("name = ?", dto.OrganizationName).
-			First(&org).
-			Error
-	}()
-
-	wg.Wait()
+	adminErr = s.db.
+		Select("id").
+		Where("email = ?", dto.Email).
+		First(&admin).
+		Error
 
 	// Admin query
 	switch {
@@ -63,35 +41,17 @@ func (s *AdminService) RegisterAdmin(dto *dto.RegisterAdminDTO) (*int32, error) 
 		return nil, fmt.Errorf("check admin existence: %w", adminErr)
 	}
 
-	// Organization query
-	switch {
-	case orgErr == nil:
-		return nil, errors.New("organization already exists")
-
-	case !errors.Is(orgErr, gorm.ErrRecordNotFound):
-		return nil, fmt.Errorf("check organization existence: %w", orgErr)
-	}
-
 	var returnedID *int32
 
 	err := s.db.Transaction(func(tx *gorm.DB) error {
-		org := entities.Organization{
-			Name: dto.OrganizationName,
-		}
-
-		if err := tx.Create(&org).Error; err != nil {
-			return fmt.Errorf("create organization: %w", err)
-		}
-
 		hashedPassword, err := utils.Hash(dto.Password)
 		if err != nil {
 			return fmt.Errorf("hash password: %w", err)
 		}
 
 		admin := entities.Admin{
-			Name:           dto.Email,
-			Email:          dto.Email,
-			OrganizationID: &org.ID,
+			Name:  dto.Email,
+			Email: dto.Email,
 		}
 
 		if err := tx.Create(&admin).Error; err != nil {
@@ -117,4 +77,35 @@ func (s *AdminService) RegisterAdmin(dto *dto.RegisterAdminDTO) (*int32, error) 
 	}
 
 	return returnedID, nil
+}
+
+func (s *AdminService) LoginAdmin(dto *dto.LoginAdminDTO) (string, error) {
+	var (
+		admin    entities.Admin
+		adminErr error
+	)
+
+	adminErr = s.db.Joins("AdminCredential").
+		Where("email = ?", dto.Email).
+		First(&admin).
+		Error
+
+	switch {
+	case errors.Is(adminErr, gorm.ErrRecordNotFound):
+		return "", errors.New("admin not found")
+
+	case adminErr != nil:
+		return "", fmt.Errorf("check admin existence: %w", adminErr)
+	}
+
+	if err := utils.Compare(admin.AdminCredential.HashedPassword, dto.Password); err != nil {
+		return "", errors.New("invalid password")
+	}
+
+	token, err := utils.GenerateJWT(admin.ID)
+	if err != nil {
+		return "", fmt.Errorf("generate JWT: %w", err)
+	}
+
+	return token, nil
 }
