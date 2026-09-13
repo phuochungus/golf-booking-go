@@ -10,11 +10,11 @@ import (
 )
 
 type AdminController struct {
-	s *AdminService
+	adminService *AdminService
 }
 
 func NewAdminController(s *AdminService) *AdminController {
-	return &AdminController{s: s}
+	return &AdminController{adminService: s}
 }
 
 func (a *AdminController) RegisterAdmin(c *gin.Context) {
@@ -23,7 +23,7 @@ func (a *AdminController) RegisterAdmin(c *gin.Context) {
 		response.ErrorResponse(c, http.StatusBadRequest, err.Error(), http.StatusBadRequest)
 		return
 	}
-	id, err := a.s.RegisterAdmin(c.Request.Context(), dto)
+	id, err := a.adminService.RegisterAdmin(c.Request.Context(), dto)
 	if err != nil {
 		response.ErrorResponse(c, http.StatusInternalServerError, err.Error(), response.ErrorCodeBadRequest)
 		return
@@ -37,7 +37,7 @@ func (a *AdminController) LoginAdmin(c *gin.Context) {
 		response.ErrorResponse(c, http.StatusBadRequest, err.Error(), http.StatusBadRequest)
 		return
 	}
-	accessToken, refreshToken, err := a.s.LoginAdmin(c.Request.Context(), &dto)
+	accessToken, refreshToken, err := a.adminService.LoginAdmin(c.Request.Context(), &dto)
 	if err != nil {
 		status, message := http.StatusInternalServerError, "authentication unavailable"
 		if errors.Is(err, ErrUnauthorized) {
@@ -60,7 +60,7 @@ func (a *AdminController) RefreshAdmin(c *gin.Context) {
 		response.ErrorResponse(c, http.StatusBadRequest, "refreshToken is required and must be at most 4096 characters", http.StatusBadRequest)
 		return
 	}
-	access, refresh, err := a.s.RefreshAdmin(c.Request.Context(), body.RefreshToken)
+	access, refresh, err := a.adminService.RefreshAdmin(c.Request.Context(), body.RefreshToken)
 	if err != nil {
 		status, message := http.StatusInternalServerError, "authentication unavailable"
 		if errors.Is(err, ErrUnauthorized) {
