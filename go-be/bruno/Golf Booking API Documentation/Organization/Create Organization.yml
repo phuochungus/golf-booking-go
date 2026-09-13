@@ -6,15 +6,15 @@ info:
 http:
   method: POST
   url: "{{baseURL}}/api/v1/organization"
+  headers:
+    - name: Authorization
+      value: Bearer {{accessToken}}
   body:
     type: json
     data: |-
       {
         "name": "Test Hung3"
       }
-  auth:
-    type: bearer
-    token: ""
 
 settings:
   encodeUrl: true

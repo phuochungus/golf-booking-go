@@ -8,12 +8,7 @@ http:
   url: http://localhost:8002/api/v1/organization/1
   headers:
     - name: Authorization
-      value: "Bearer "
-    - name: Content-Type
-      value: application/json
-  auth:
-    type: bearer
-    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6NCwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImV4cCI6MTc4OTI4Nzg1NywiaWF0IjoxNzg5Mjg3NTU3LCJqdGkiOiI3Y2VhZjk5Yjc2YzBiNjY1ZWNhNGIxMzBhNDY5NDc4NTVmMjViNTgzYjg3ZTk1YThjZDAzM2NkYjUzOGEzYjY5In0.pGj9FTazLmgYO2R7ZYO2H36KIk-FuGELYZe_hFmPhfw
+      value: Bearer {{accessToken}}
 
 settings:
   encodeUrl: true

@@ -2,4 +2,5 @@ name: LOCAL
 variables:
   - name: baseURL
     value: http://localhost:8002
-    description: ""
+  - secret: true
+    name: accessToken
