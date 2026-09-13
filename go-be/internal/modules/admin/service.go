@@ -110,7 +110,7 @@ func (s *AdminService) LoginAdmin(ctx context.Context, dto *dto.LoginAdminDTO) (
 	return s.issueTokens(ctx, admin.ID, "")
 }
 
-func (s *AdminService) RefreshAdmin(ctx context.Context, raw string) (string, string, error) {
+func (s *AdminService) RefreshToken(ctx context.Context, raw string) (string, string, error) {
 	claims, err := utils.ParseToken(raw, "refresh")
 	if errors.Is(err, utils.ErrInvalidToken) {
 		return "", "", ErrUnauthorized

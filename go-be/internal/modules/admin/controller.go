@@ -60,7 +60,7 @@ func (a *AdminController) RefreshAdmin(c *gin.Context) {
 		response.ErrorResponse(c, http.StatusBadRequest, "refreshToken is required and must be at most 4096 characters", http.StatusBadRequest)
 		return
 	}
-	access, refresh, err := a.adminService.RefreshAdmin(c.Request.Context(), body.RefreshToken)
+	access, refresh, err := a.adminService.RefreshToken(c.Request.Context(), body.RefreshToken)
 	if err != nil {
 		status, message := http.StatusInternalServerError, "authentication unavailable"
 		if errors.Is(err, ErrUnauthorized) {
