@@ -110,8 +110,8 @@ func (s *AdminService) LoginAdmin(ctx context.Context, dto *dto.LoginAdminDTO) (
 	return s.issueTokens(ctx, admin.ID, "")
 }
 
-func (s *AdminService) RefreshToken(ctx context.Context, raw string) (string, string, error) {
-	claims, err := utils.ParseToken(raw, "refresh")
+func (s *AdminService) RefreshToken(ctx context.Context, rawRefreshToken string) (string, string, error) {
+	claims, err := utils.ParseToken(rawRefreshToken, "refresh")
 	if errors.Is(err, utils.ErrInvalidToken) {
 		return "", "", ErrUnauthorized
 	}
@@ -126,7 +126,7 @@ func (s *AdminService) RefreshToken(ctx context.Context, raw string) (string, st
 	if err != nil {
 		return "", "", fmt.Errorf("find admin: %w", err)
 	}
-	return s.issueTokens(ctx, admin.ID, raw)
+	return s.issueTokens(ctx, admin.ID, rawRefreshToken)
 }
 
 func (s *AdminService) issueTokens(ctx context.Context, adminID int32, previous string) (string, string, error) {
@@ -138,6 +138,12 @@ func (s *AdminService) issueTokens(ctx context.Context, adminID int32, previous 
 		return "", "", fmt.Errorf("generate JWT: %w", err)
 	}
 	key := fmt.Sprintf("admin:refresh:%x", sha256.Sum256([]byte(refresh)))
+
+	// Replay protection:
+	// If the previous refresh token is provided, we need to ensure that it is valid and has not been used before.
+	// We use Redis to store the refresh tokens and check if the previous token exists.
+	// If it does, we delete it and store the new one.
+	// If it doesn't exist, we return an unauthorized error.
 	if previous == "" {
 		err = global.RDB.Set(ctx, key, "1", utils.RefreshTokenTTL).Err()
 	} else {
