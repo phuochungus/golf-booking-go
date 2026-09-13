@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter(apiGroup *gin.RouterGroup) {
+func InitRouters(apiGroup *gin.RouterGroup) {
 	admin.InitAdminRouter(apiGroup)
 	organization.InitOrganizationRouter(apiGroup)
 }

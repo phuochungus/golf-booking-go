@@ -21,7 +21,7 @@ func Run() {
 
 	apiV1Group := r.Group("/api/v1")
 
-	router.InitRouter(apiV1Group)
+	router.InitRouters(apiV1Group)
 
 	r.Run(":8002")
 }
