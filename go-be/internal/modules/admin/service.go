@@ -13,7 +13,11 @@ import (
 	"gorm.io/gorm"
 )
 
-var ErrUnauthorized = errors.New("invalid credentials or refresh token")
+var (
+	ErrUnauthorized  = errors.New("invalid credentials or refresh token")
+	ErrAdminNotFound = errors.New("admin not found")
+	ErrAdminExists   = errors.New("admin already exists")
+)
 
 type AdminService struct {
 	db *gorm.DB
@@ -40,7 +44,7 @@ func (s *AdminService) RegisterAdmin(ctx context.Context, dto *dto.RegisterAdmin
 	// Admin query
 	switch {
 	case adminErr == nil:
-		return nil, errors.New("admin already exists")
+		return nil, ErrAdminExists
 
 	case !errors.Is(adminErr, gorm.ErrRecordNotFound):
 		return nil, fmt.Errorf("check admin existence: %w", adminErr)
@@ -84,7 +88,7 @@ func (s *AdminService) RegisterAdmin(ctx context.Context, dto *dto.RegisterAdmin
 	return returnedID, nil
 }
 
-func (s *AdminService) LoginAdmin(ctx context.Context, dto *dto.LoginAdminDTO) (string, string, error) {
+func (s *AdminService) LoginAdmin(ctx context.Context, dto *dto.LoginAdminDTO) (*string, *string, error) {
 	var admin entities.Admin
 
 	adminErr := s.db.WithContext(ctx).Joins("AdminCredential").
@@ -94,48 +98,48 @@ func (s *AdminService) LoginAdmin(ctx context.Context, dto *dto.LoginAdminDTO) (
 
 	switch {
 	case errors.Is(adminErr, gorm.ErrRecordNotFound):
-		return "", "", ErrUnauthorized
+		return nil, nil, ErrUnauthorized
 
 	case adminErr != nil:
-		return "", "", fmt.Errorf("check admin existence: %w", adminErr)
+		return nil, nil, fmt.Errorf("check admin existence: %w", adminErr)
 	}
 
 	if admin.AdminCredential == nil {
-		return "", "", ErrUnauthorized
+		return nil, nil, ErrUnauthorized
 	}
 	if err := utils.Compare(admin.AdminCredential.HashedPassword, dto.Password); err != nil {
-		return "", "", ErrUnauthorized
+		return nil, nil, ErrUnauthorized
 	}
 
 	return s.issueTokens(ctx, admin.ID, "")
 }
 
-func (s *AdminService) RefreshToken(ctx context.Context, rawRefreshToken string) (string, string, error) {
+func (s *AdminService) RefreshToken(ctx context.Context, rawRefreshToken string) (*string, *string, error) {
 	claims, err := utils.ParseToken(rawRefreshToken, "refresh")
 	if errors.Is(err, utils.ErrInvalidToken) {
-		return "", "", ErrUnauthorized
+		return nil, nil, ErrUnauthorized
 	}
 	if err != nil {
-		return "", "", err
+		return nil, nil, err
 	}
 	var admin entities.Admin
 	err = s.db.WithContext(ctx).Select("id").First(&admin, claims.AdminID).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return "", "", ErrUnauthorized
+		return nil, nil, ErrUnauthorized
 	}
 	if err != nil {
-		return "", "", fmt.Errorf("find admin: %w", err)
+		return nil, nil, fmt.Errorf("find admin: %w", err)
 	}
 	return s.issueTokens(ctx, admin.ID, rawRefreshToken)
 }
 
-func (s *AdminService) issueTokens(ctx context.Context, adminID int32, previous string) (string, string, error) {
+func (s *AdminService) issueTokens(ctx context.Context, adminID int32, previous string) (*string, *string, error) {
 	if global.RDB == nil {
-		return "", "", errors.New("refresh token store unavailable")
+		return nil, nil, errors.New("refresh token store unavailable")
 	}
 	access, refresh, err := utils.GenerateTokens(adminID)
 	if err != nil {
-		return "", "", fmt.Errorf("generate JWT: %w", err)
+		return nil, nil, fmt.Errorf("generate JWT: %w", err)
 	}
 	key := fmt.Sprintf("admin:refresh:%x", sha256.Sum256([]byte(refresh)))
 
@@ -157,11 +161,11 @@ redis.call('DEL', KEYS[1])
 return 1
 `, []string{previousKey, key}, int64(utils.RefreshTokenTTL.Seconds())).Int()
 		if err == nil && rotated != 1 {
-			return "", "", ErrUnauthorized
+			return nil, nil, ErrUnauthorized
 		}
 	}
 	if err != nil {
-		return "", "", fmt.Errorf("store refresh token: %w", err)
+		return nil, nil, fmt.Errorf("store refresh token: %w", err)
 	}
-	return access, refresh, nil
+	return &access, &refresh, nil
 }
