@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "email": "phuochungus@gmail.com",
-        "password": "123456"
+        "password": "123456`"
       }
   auth: inherit
 
@@ -21,3 +21,35 @@ settings:
   followRedirects: true
   maxRedirects: 5
   forwardAuthorizationHeader: false
+
+examples:
+  - name: "500"
+    request:
+      url: "{{baseURL}}/api/v1/admin/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "phuochungus@gmail.com",
+            "password": "123456`"
+          }
+    response:
+      status: 500
+      statusText: Internal Server Error
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 05:30:49 GMT
+        - name: content-length
+          value: "73"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 50000,
+            "message": "internal server error",
+            "data": null,
+            "details": {}
+          }
