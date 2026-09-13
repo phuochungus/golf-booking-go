@@ -12,10 +12,5 @@ migrate_down:
 	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_MIGRATION_DIR=${GOOSE_MIGRATION_DIR} GOOSE_TABLE=${GOOSE_TABLE} goose -dir=${GOOSE_MIGRATION_DIR} down
 migrate_create:
 	@GOOSE_DRIVER=${GOOSE_DRIVER} GOOSE_DBSTRING=${GOOSE_DBSTRING} GOOSE_MIGRATION_DIR=${GOOSE_MIGRATION_DIR} GOOSE_TABLE=${GOOSE_TABLE} goose -dir=${GOOSE_MIGRATION_DIR} create $(name) sql
-up:
-	docker-compose up -d
-down:
-	docker-compose down
-build:
-	docker-compose build
-.PHONY: run migrate_up migrate_down up down build
+	
+.PHONY: run migrate_up migrate_down migrate_create

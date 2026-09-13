@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "email": "phuochungus@gmail.com",
-        "password": "123456`"
+        "password": "123456"
       }
   auth: inherit
 
@@ -52,4 +52,67 @@ examples:
             "message": "internal server error",
             "data": null,
             "details": {}
+          }
+  - name: "401"
+    request:
+      url: "{{baseURL}}/api/v1/admin/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "phuochungus@gmail.com",
+            "password": "123456`"
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 07:20:49 GMT
+        - name: content-length
+          value: "75"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 40001,
+            "message": "invalid credentials or refresh token",
+            "data": null
+          }
+  - name: "200"
+    request:
+      url: "{{baseURL}}/api/v1/admin/login"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "email": "phuochungus@gmail.com",
+            "password": "123456"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: cache-control
+          value: no-store
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 07:21:06 GMT
+        - name: content-length
+          value: "612"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 0,
+            "message": "",
+            "data": {
+              "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MSwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImV4cCI6MTc4OTI4NDM2NiwiaWF0IjoxNzg5Mjg0MDY2LCJqdGkiOiI2MDI0MGUzN2I4OTQ4MzFlNTM3MzRjNTY1NzIyYTNlZGRhY2Y5MmYxYWQ2MmVlZTIzYmQyZjBiODAzY2YwMzAyIn0.Y_jtKEgT64kuk-S4z5H8fVFeYfXkMeW6dzA_OOd1nX0",
+              "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MSwidG9rZW5fdHlwZSI6InJlZnJlc2giLCJleHAiOjE3ODk4ODg4NjYsImlhdCI6MTc4OTI4NDA2NiwianRpIjoiZTgyMzM4ZmU3ODliNTM1OGIxOTQ2MTFkZmU5OGU5MjRhMjQ5ZDBjMDkyMzA2ZTg5MGVlODU2MTliNTRlNGJiOSJ9.V1rVNHZyru3Zk9sjDWiz-wSzuYj8G5MIf2hCHmnW-zI"
+            }
           }

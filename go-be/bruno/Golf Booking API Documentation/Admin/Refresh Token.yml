@@ -1,0 +1,86 @@
+info:
+  name: Refresh Token
+  type: http
+  seq: 3
+
+http:
+  method: POST
+  url: "{{baseURL}}/api/v1/admin/refresh"
+  body:
+    type: json
+    data: |-
+      {
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MSwidG9rZW5fdHlwZSI6InJlZnJlc2giLCJleHAiOjE3ODk4ODkwMDUsImlhdCI6MTc4OTI4NDIwNSwianRpIjoiMWE4ZWJjZmU2ZTdlNGQ2Y2ZkODZiOGE0NjYyZDY1YTIwODE4MjBlNzk0OWFlZGE5MzgwNDA5ZjU2ZmNiZWM5OCJ9.7paAtNPRIDBnhKRJirJyM2BtSDKMCb__9axSvIbl7cg"
+      }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: "401"
+    request:
+      url: "{{baseURL}}/api/v1/admin/refresh"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MSwidG9rZW5fdHlwZSI6InJlZnJlc2giLCJleHAiOjE3ODk4ODg4NjYsImlhdCI6MTc4OTI4NDA2NiwianRpIjoiZTgyMzM4ZmU3ODliNTM1OGIxOTQ2MTFkZmU5OGU5MjRhMjQ5ZDBjMDkyMzA2ZTg5MGVlODU2MTliNTRlNGJiOSJ9.V1rVNHZyru3Zk9sjDWiz-wSzuYj8G5MIf2hCHmnW-zI"
+          }
+    response:
+      status: 401
+      statusText: Unauthorized
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 07:22:33 GMT
+        - name: content-length
+          value: "86"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 401,
+            "message": "invalid credentials or refresh token",
+            "data": null,
+            "details": {}
+          }
+  - name: "200"
+    request:
+      url: "{{baseURL}}/api/v1/admin/refresh"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MSwidG9rZW5fdHlwZSI6InJlZnJlc2giLCJleHAiOjE3ODk4ODkwMDUsImlhdCI6MTc4OTI4NDIwNSwianRpIjoiMWE4ZWJjZmU2ZTdlNGQ2Y2ZkODZiOGE0NjYyZDY1YTIwODE4MjBlNzk0OWFlZGE5MzgwNDA5ZjU2ZmNiZWM5OCJ9.7paAtNPRIDBnhKRJirJyM2BtSDKMCb__9axSvIbl7cg"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: cache-control
+          value: no-store
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 07:23:37 GMT
+        - name: content-length
+          value: "612"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 0,
+            "message": "",
+            "data": {
+              "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MSwidG9rZW5fdHlwZSI6ImFjY2VzcyIsImV4cCI6MTc4OTI4NDUxNywiaWF0IjoxNzg5Mjg0MjE3LCJqdGkiOiIyOTBiMTE4YmU0NGEyOTA0MGRjYTg5MmRlNTEzNzg1Yzk1Zjk0ZjRkMDA5NDU0N2FmYjE3Y2NkZDUwOWU3Y2E5In0.vttCneaBRLf8cFRoW7hpvwNXm4KhH_nzvmjLRIaBIpQ",
+              "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbl9pZCI6MSwidG9rZW5fdHlwZSI6InJlZnJlc2giLCJleHAiOjE3ODk4ODkwMTcsImlhdCI6MTc4OTI4NDIxNywianRpIjoiMWE4ZmUzMTBjOWEwNDk2NTBkYjIwMzIwOTQ1YTM2MmNmN2Y3MzQ0ZjUxNGU2YTM4YjAwMDJkZmNiZDU0ZGMxZiJ9.qLkoD_B-dWhX03hRTBn7IV_qYa-ZA8tAwacJ-tNJPiY"
+            }
+          }
