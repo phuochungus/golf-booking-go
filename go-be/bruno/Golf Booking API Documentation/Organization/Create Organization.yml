@@ -1,0 +1,112 @@
+info:
+  name: Create Organization
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseURL}}/api/v1/organization"
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Test Hung3"
+      }
+  auth:
+    type: bearer
+    token: ""
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false
+
+examples:
+  - name: "409"
+    request:
+      url: "{{baseURL}}/api/v1/organization"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Test Hung"
+          }
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 07:56:12 GMT
+        - name: content-length
+          value: "79"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 20005,
+            "message": "admin already belongs to an organization",
+            "data": null
+          }
+  - name: "200"
+    request:
+      url: "{{baseURL}}/api/v1/organization"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Test Hung3"
+          }
+    response:
+      status: 200
+      statusText: OK
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 08:18:53 GMT
+        - name: content-length
+          value: "52"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 0,
+            "message": "",
+            "data": {
+              "organization_id": 4
+            }
+          }
+  - name: "409"
+    request:
+      url: "{{baseURL}}/api/v1/organization"
+      method: POST
+      body:
+        type: json
+        data: |-
+          {
+            "name": "Test Hung3"
+          }
+    response:
+      status: 409
+      statusText: Conflict
+      headers:
+        - name: content-type
+          value: application/json; charset=utf-8
+        - name: date
+          value: Sun, 13 Sep 2026 08:20:56 GMT
+        - name: content-length
+          value: "85"
+      body:
+        type: json
+        data: |-
+          {
+            "code": 20006,
+            "message": "organization with the same name already exists",
+            "data": null
+          }

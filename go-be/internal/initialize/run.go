@@ -3,7 +3,7 @@ package initialize
 import (
 	"fmt"
 	"golf-booking-go/global"
-	"golf-booking-go/internal/router/admin"
+	"golf-booking-go/internal/router"
 
 	"go.uber.org/zap"
 )
@@ -15,12 +15,13 @@ func Run() {
 	global.Logger.Info("Config log ok!!", zap.String("ok", "success"))
 	InitMysql()
 	InitRedis()
+	InitMiddlewares()
 
 	r := InitRouter()
 
 	apiV1Group := r.Group("/api/v1")
 
-	admin.InitAdminRouter(apiV1Group)
+	router.InitRouter(apiV1Group)
 
 	r.Run(":8002")
 }

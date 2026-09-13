@@ -7,7 +7,6 @@ import (
 )
 
 func InitRouter() *gin.Engine {
-	// r := routers.NewRouter()
 	var r *gin.Engine
 	if global.Config.Server.Mode == "dev" {
 		gin.SetMode(gin.DebugMode)
@@ -17,21 +16,5 @@ func InitRouter() *gin.Engine {
 		gin.SetMode(gin.ReleaseMode)
 		r = gin.New()
 	}
-	// manageRouter := routers.RouterGroupApp.Manage
-	// userRouter := routers.RouterGroupApp.User
-
-	// MainGroup := r.Group("/v1")
-	// {
-	// 	MainGroup.GET("/health")
-	// }
-	// {
-	// 	manageRouter.InitAdminRouter(MainGroup)
-	// 	manageRouter.InitUserRouter(MainGroup)
-	// }
-	// {
-	// 	userRouter.InitUserRouter(MainGroup)
-	// 	userRouter.InitProductRouter(MainGroup)
-	// }
-
 	return r
 }
